@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is it down?</title>
+    <link rel="stylesheet" href="styles/style.css">
+	<link rel="icon" href="https://douxx.tech/public/icons/icon.png">
+</head>
+<body>
+    <div class="container">
+        <h1>Is it down?</h1>
+        <form method="POST">
+            <input type="text" name="url" placeholder="Enter an ip or url" required>
+            <button type="submit">Check</button>
+        </form>
+
+        <div class="result"></div>
+		<div class="checking" style="display: none;">
+            Checking...
+        </div>
+    </div>
+    <script src="scripts/script.js"></script>
+</body>
+</html>
