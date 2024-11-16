@@ -6,7 +6,7 @@ function isSiteUp($url) {
     if ($domain === false) {
         return [
             'status' => 'error',
-            'message' => 'Invalid URL provided.'
+            'message' => htmlspecialchars('Invalid URL provided.')
         ];
     }
 
@@ -22,26 +22,37 @@ function isSiteUp($url) {
         if ($pingTime > 5000) {
             return [
                 'status' => 'down',
-                'message' => 'The response time is too long.'
+                'message' => htmlspecialchars('The response time is too long.')
             ];
         }
 
         $headers = @get_headers("http://$domain", 1);
+        
+        if ($headers) {
+            foreach ($headers as $key => $value) {
+                $headers[$key] = htmlspecialchars(
+                    is_array($value) ? implode(', ', array_map('htmlspecialchars', $value)) : $value
+                );
+            }
+        } else {
+            $headers = htmlspecialchars('Unable to retrieve headers');
+        }
+        
         return [
             'status' => 'up',
-            'ping' => $pingTime,
-            'headers' => $headers ?: 'Unable to retrieve headers'
+            'ping' => htmlspecialchars($pingTime),
+            'headers' => $headers
         ];
     } else {
         return [
             'status' => 'down',
-            'message' => 'The site is down.'
+            'message' => htmlspecialchars('The site is down.')
         ];
     }
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url'])) {
-    $url = $_POST['url'];
+    $url = htmlspecialchars($_POST['url']);
     echo json_encode(isSiteUp($url));
 }
 ?>
